@@ -16,6 +16,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.Mockito.times;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ConfigurationLoader.class, NewsReaderFactory.class})
@@ -66,5 +67,11 @@ public class NewsLoaderTest {
 		assertThat(publishableNews.getSubsrcibentContent().get(0), is(equalTo("SubsriptionMessageA")));
 		assertThat(publishableNews.getSubsrcibentContent().get(1), is(equalTo("SubsriptionMessageB")));
 		assertThat(publishableNews.getSubsrcibentContent().get(2), is(equalTo("SubsriptionMessageC")));
+	}
+	
+	@Test
+	public void test_VerifyGetReaderArgumant() {
+		newsLoader.loadNews();
+		verify(NewsReaderFactory.getReader("FileReader"), times(1));
 	}
 }
