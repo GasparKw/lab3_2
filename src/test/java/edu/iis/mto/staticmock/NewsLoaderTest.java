@@ -58,4 +58,13 @@ public class NewsLoaderTest {
 		assertThat(publishableNews.getPublicContent().get(0), is(equalTo("PublicMessage1")));
 		assertThat(publishableNews.getPublicContent().get(1), is(equalTo("PublicMessage2")));
 	}
+	
+	@Test 
+	public void test_VerifySubscribentMessages() {
+		PublishableNews publishableNews = newsLoader.loadNews();
+		assertThat(publishableNews.getSubsrcibentContent().size(), is(equalTo(3)));
+		assertThat(publishableNews.getSubsrcibentContent().get(0), is(equalTo("SubsriptionMessageA")));
+		assertThat(publishableNews.getSubsrcibentContent().get(1), is(equalTo("SubsriptionMessageB")));
+		assertThat(publishableNews.getSubsrcibentContent().get(2), is(equalTo("SubsriptionMessageC")));
+	}
 }
