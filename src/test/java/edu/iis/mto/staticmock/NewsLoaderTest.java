@@ -50,4 +50,12 @@ public class NewsLoaderTest {
 		when(NewsReaderFactory.getReader("FileReader")).thenReturn(mockFileNewsReader);
 		when(mockFileNewsReader.read()).thenReturn(incomingNews);
 	}
+	
+	@Test 
+	public void test_VerifyPublicMessages() {
+		PublishableNews publishableNews = newsLoader.loadNews();
+		assertThat(publishableNews.getPublicContent().size(), is(equalTo(2)));
+		assertThat(publishableNews.getPublicContent().get(0), is(equalTo("PublicMessage1")));
+		assertThat(publishableNews.getPublicContent().get(1), is(equalTo("PublicMessage2")));
+	}
 }
