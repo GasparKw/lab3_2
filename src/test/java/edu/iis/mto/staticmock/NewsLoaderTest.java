@@ -9,24 +9,45 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 import static org.powermock.api.mockito.PowerMockito.*;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ConfigurationLoader.class, NewsReaderFactory.class})
 
 
 public class NewsLoaderTest {
+	private NewsLoader newsLoader;
+	private IncomingNews incomingNews;
 	
 	@Before
 	public void setUp() {
+		newsLoader = new NewsLoader();
+		Configuration config = new Configuration();
 		
-	}
-
-	@Test
-	public void test_loadNews() {
+		mockStatic(ConfigurationLoader.class);
+		mockStatic(NewsReaderFactory.class);
 		
+		ConfigurationLoader mockLoader = mock(ConfigurationLoader.class);
+		FileNewsReader mockFileNewsReader = mock(FileNewsReader.class);
+		
+		Whitebox.setInternalState(config, "readerType", "FileReader");
+		
+		incomingNews = new IncomingNews();
+		incomingNews.add(new IncomingInfo("PublicMessage1", SubsciptionType.NONE));
+		incomingNews.add(new IncomingInfo("PublicMessage2", SubsciptionType.NONE));
+		incomingNews.add(new IncomingInfo("SubsriptionMessageA", SubsciptionType.A));
+		incomingNews.add(new IncomingInfo("SubsriptionMessageB", SubsciptionType.B));
+		incomingNews.add(new IncomingInfo("SubsriptionMessageC", SubsciptionType.C));
+		
+		when(ConfigurationLoader.getInstance()).thenReturn(mockLoader);
+		when(mockLoader.loadConfiguration()).thenReturn(config);
+		when(NewsReaderFactory.getReader("FileReader")).thenReturn(mockFileNewsReader);
+		when(mockFileNewsReader.read()).thenReturn(incomingNews);
 	}
 }
